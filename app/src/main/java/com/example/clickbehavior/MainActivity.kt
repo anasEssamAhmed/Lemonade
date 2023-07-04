@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
 fun LemonadeApp() {
     var currentImage by remember { mutableStateOf(R.drawable.lemon_tree) }
     var counter by remember { mutableStateOf(1) }
-    var counter2 by remember { mutableStateOf(1) }
+    var squeezeCounter by remember { mutableStateOf(1) }
     var text by remember { mutableStateOf("Tap the lemon tree to select a lemon") }
 
     currentImage = when (counter) {
@@ -109,39 +109,12 @@ fun LemonadeApp() {
                 .size(200.dp)
                 .background(Color(0xFFc3ecd2), RoundedCornerShape(10.dp))
                 .clickable {
-                    if(counter == 2){
-                        if (counter2 == 1) {
-                            counter2 = (2..5).random()
-                        }
-                        counter2--
-                        if(counter2 == 1){
-                            counter = 3
-                        }
-                    }
 
-               else if (counter != 4 ){
-                        counter++
-                    }else {
-                        counter = 1
-                    }
-
-
-
-/*                    if(counter >= 4){
-                        if (counter == 2){
-                            counter2 = (2..5).random()
-                        }else {
-                            counter++
-                        }
-                    }else {
-                        counter = 1
-                    }
-
-                    if (counter2 >= 2 && counter == 2){
-                        counter2--
-                    }else {
-                        counter = 3
-                    }*/
+                    val returnValues: Pair<Int, Int> = changeCounterAndSqueezeCounter(counter = counter, squeezeCounter = squeezeCounter)
+                    counter = returnValues.first
+                    squeezeCounter = returnValues.second
+                    Log.d("anas", "This is counter : $counter")
+                    Log.d("anas", "This is squeezeCounter : $squeezeCounter")
                 },
 
             )
@@ -150,6 +123,26 @@ fun LemonadeApp() {
     }
 
 
+}
+
+fun changeCounterAndSqueezeCounter(counter: Int, squeezeCounter: Int): Pair<Int, Int> {
+    var counterModified = counter
+    var squeezeCounterModified = squeezeCounter
+    if (counterModified == 2) {
+        if (squeezeCounterModified == 1) {
+            squeezeCounterModified = (2..5).random()
+        }
+        squeezeCounterModified--
+        if (squeezeCounterModified == 1) {
+            counterModified = 3
+        }
+    } else if (counterModified != 4) {
+        counterModified++
+    } else {
+        counterModified = 1
+    }
+
+    return counterModified to squeezeCounterModified
 }
 
 @Composable
